@@ -6,44 +6,34 @@
     <title>21 Blast Challenge</title>
     <style>
        html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden; /* Prevent scrolling */
-}
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
 
-body {
-    font-family: Arial, sans-serif;
-    background-image: url('https://static.vecteezy.com/system/resources/thumbnails/029/140/987/small_2x/abstract-mystical-particle-burst-ai-generated-photo.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    text-align: center;
-    padding: 0; /* Remove padding */
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://static.vecteezy.com/system/resources/thumbnails/029/140/987/small_2x/abstract-mystical-particle-burst-ai-generated-photo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center;
+            padding: 0; /* Remove padding */
+        }
 
-.game-container {
-    width: 600px;
-    height: 400px;
-    margin: 0 auto;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    overflow: hidden;
-}
-
-
-        input[type="text"], input[type="number"] {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            color: #333;
+        .container {
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
         }
 
         button {
@@ -60,34 +50,39 @@ body {
             display: none;
         }
 
-        .result {
-            font-size: 18px;
-            margin-top: 20px;
+        .instructions {
+            text-align: left;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
         }
 
-        .turn-info {
+        .result, .error, .turn-info, .blast-animation, .game-end-message {
+            min-height: 30px;
+        }
+
+        /* Additional Styles for Game Elements */
+        input[type="text"], input[type="number"] {
+            width: 80%;
+            padding: 10px;
             margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #333;
         }
 
-        .blast-animation {
-            font-size: 24px;
-            color: green;
-            animation: blast 1s ease-out;
-            margin-top: 20px;
-        }
-
-        @keyframes blast {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.5);
-                color: orange;
-            }
-            100% {
-                transform: scale(1);
-                color: green;
-            }
+        .game-container {
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
         }
 
         .error {
@@ -103,14 +98,29 @@ body {
             font-weight: bold;
         }
 
-        .result, .error, .turn-info, .blast-animation, .game-end-message {
-            min-height: 30px;
-        }
     </style>
 </head>
 <body>
 
-    <div class="game-container">
+    <div class="container">
+        <!-- Game Instructions Section -->
+        <h1>Welcome to 21 Blast Challenge!</h1>
+
+        <div id="instructions" class="instructions">
+            <h2>How to Play:</h2>
+            <p>- You can choose either Single Player (vs Robot) or Multiplayer (2 Players).</p>
+            <p>- The game starts with the number 1, and each player takes turns entering consecutive numbers.</p>
+            <p>- On your turn, you can enter a minimum of 1 number and a maximum of 3 numbers.</p>
+            <p>- The player who is forced to enter the number 21 loses the game!</p>
+            <p>- Be strategic! Try to force your opponent to reach 21.</p>
+        </div>
+
+        <!-- Start Game Button -->
+        <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <!-- Game Section (Hidden Initially) -->
+    <div class="game-container hidden" id="gameSection">
         <h1>21 Blast Challenge</h1>
 
         <div id="player-selection">
@@ -140,6 +150,12 @@ body {
         let currentTurn = 0;
         let currentNumber = 0;
         const maxNumber = 21;
+
+        // Function to hide instructions and show the game
+        function startGame() {
+            document.querySelector('.container').classList.add('hidden');
+            document.getElementById('gameSection').classList.remove('hidden');
+        }
 
         function startSinglePlayer() {
             playerCount = 1;
@@ -189,7 +205,6 @@ body {
 
             // Check if input is valid
             if (enteredNumbers.length < 1 || enteredNumbers.length > 3 || enteredNumbers.some(isNaN)) {
-                shakeScreen();
                 displayErrorMessage("Please enter 1 to 3 valid numbers, space-separated.");
                 return;
             }
@@ -199,23 +214,20 @@ body {
             // Validate if the player followed the sequence
             for (let number of enteredNumbers) {
                 if (number !== currentNumber + 1) {
-                    shakeScreen();
                     displayErrorMessage("You must continue the sequence from the last number!");
                     return;
                 }
                 currentNumber++;
 
-                // Check if the player reaches 21
                 if (currentNumber === maxNumber) {
-                    endGame(`${player} lost!`);  // Player lost condition (reaching 21)
+                    endGame(`${player} lost!`);
                     return;
                 }
 
-                // Check if the player reaches 20
                 if (currentNumber === maxNumber - 1) {
                     document.getElementById('result').innerHTML += `${player} entered: ${enteredNumbers.join(", ")}<br>`;
                     document.getElementById('numberInput').value = ""; // Clear input box
-                    setTimeout(() => endGame(`${player} won!`), 1000); // Win after a brief pause
+                    setTimeout(() => endGame(`${player} won!`), 1000);
                     return;
                 }
             }
@@ -223,7 +235,6 @@ body {
             document.getElementById('result').innerHTML += `${player} entered: ${enteredNumbers.join(", ")}<br>`;
             document.getElementById('numberInput').value = ""; // Clear input box
 
-            // Change turn to the next player
             currentTurn = (currentTurn + 1) % players.length;
 
             if (playerCount === 1 && currentTurn === 0) {
@@ -262,12 +273,6 @@ body {
 
         function displayErrorMessage(message) {
             document.getElementById('errorDisplay').innerText = message;
-        }
-
-        function shakeScreen() {
-            const container = document.querySelector('.game-container');
-            container.classList.add('shake');
-            setTimeout(() => container.classList.remove('shake'), 500);
         }
     </script>
 </body>
