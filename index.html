@@ -1,279 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>21 Blast Challenge</title>
-    <style>
-       html, body {
-            height: 100%;
-            margin: 0;
-            overflow: hidden; /* Prevent scrolling */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Day Surprise</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffe6e6;
+      color: #ff0066;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-image: url('https://static.vecteezy.com/system/resources/thumbnails/029/140/987/small_2x/abstract-mystical-particle-burst-ai-generated-photo.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            text-align: center;
-            padding: 0; /* Remove padding */
-        }
+    .container {
+      margin: 20px auto;
+    }
 
-        .container {
-            width: 600px;
-            height: 400px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            overflow: hidden;
-        }
+    .countdown-container {
+      margin-bottom: 30px;
+    }
 
-        button {
-            background-color: green;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-        }
+    #countdown {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
 
-        .hidden {
-            display: none;
-        }
+    #countdown div {
+      font-size: 2em;
+      background-color: #ff0066;
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+    }
 
-        .instructions {
-            text-align: left;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
+    .hearts-container {
+      margin-top: 20px;
+    }
 
-        .result, .error, .turn-info, .blast-animation, .game-end-message {
-            min-height: 30px;
-        }
+    .gift-container {
+      margin-top: 20px;
+    }
 
-        /* Additional Styles for Game Elements */
-        input[type="text"], input[type="number"] {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            color: #333;
-        }
+    .gift {
+      width: 100px;
+      height: 100px;
+      background-color: #ffcc00;
+      position: relative;
+      cursor: pointer;
+      margin: 20px auto;
+      border-radius: 10px;
+    }
 
-        .game-container {
-            width: 600px;
-            height: 400px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            overflow: hidden;
-        }
+    .gift:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 45%;
+      width: 10px;
+      height: 100%;
+      background-color: #d40000;
+    }
 
-        .error {
-            color: red;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+    .gift:after {
+      content: '';
+      position: absolute;
+      top: 45%;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background-color: #d40000;
+    }
 
-        .game-end-message {
-            margin-top: 20px;
-            font-size: 20px;
-            color: darkgreen;
-            font-weight: bold;
-        }
+    .surprise-message {
+      display: none;
+      margin-top: 0px;
+      font-size: 20px;
+    }
 
-    </style>
+    .surprise-message img {
+      margin: 0px;
+      width: 300px;
+      height: 300px;
+      margin-top: 0px;
+    }
+
+    .heart {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      background-color: #ff0066;
+      display: inline-block;
+      margin: 15px;
+      cursor: pointer;
+      transform: rotate(-45deg);
+      transition: transform 0.4s ease, background-color 0.4s ease;
+    }
+
+    .heart:before, .heart:after {
+      content: '';
+      width: 80px;
+      height: 80px;
+      background-color: #ff0066;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .heart:before {
+      top: -40px;
+      left: 0;
+    }
+
+    .heart:after {
+      top: 0;
+      left: 40px;
+    }
+
+    .heart:hover {
+      transform: rotate(-45deg) scale(1.1);
+    }
+
+    .heart:active {
+      transform: rotate(-45deg) scale(1);
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #d40000;
+      visibility: hidden;
+      transition: visibility 0.5s ease-in, opacity 0.5s ease-in;
+      opacity: 0;
+    }
+
+    .message.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .flowers-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .flower {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-image: url('https://png.pngtree.com/png-clipart/20220125/ourmid/pngtree-falling-pink-rose-petals-for-valentines-day-png-image_4361986.png');
+      background-size: cover;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        top: -100px;
+        transform: rotate(0deg);
+      }
+      100% {
+        top: 100vh;
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 <body>
-
-    <div class="container">
-        <!-- Game Instructions Section -->
-        <h1>Welcome to 21 Blast Challenge!</h1>
-
-        <div id="instructions" class="instructions">
-            <h2>How to Play:</h2>
-            <p>- You can choose either Single Player (vs Robot) or Multiplayer (2 Players).</p>
-            <p>- The game starts with the number 1, and each player takes turns entering consecutive numbers.</p>
-            <p>- On your turn, you can enter a minimum of 1 number and a maximum of 3 numbers,enter in a space-separated format.</p>
-            <p>- The player who is forced to enter the number 21 loses the game!</p>
-            <p>- Be strategic! Try to force your opponent to reach 21.</p>
-        </div>
-
-        <!-- Start Game Button -->
-        <button onclick="startGame()">Start Game</button>
+  <div class="container">
+    <div class="countdown-container">
+      <h1 id="for-name">Countdown to Valentine's Day!</h1>
+      <div id="countdown">
+        <div id="days">00</div><span>Days</span>
+        <div id="hours">00</div><span>Hours</span>
+        <div id="minutes">00</div><span>Minutes</span>
+        <div id="seconds">00</div><span>Seconds</span>
+      </div>
     </div>
 
-    <!-- Game Section (Hidden Initially) -->
-    <div class="game-container hidden" id="gameSection">
-        <h1>21 Blast Challenge</h1>
-
-        <div id="player-selection">
-            <button onclick="startSinglePlayer()">Single Player</button>
-            <button onclick="startMultiPlayer()">Multi Player</button>
-        </div>
-
-        <div id="player-names" class="hidden">
-            <div id="nameFields"></div>
-            <button onclick="startGameWithNames()">Submit Names</button>
-        </div>
-
-        <div id="game" class="hidden">
-            <div id="turnDisplay" class="turn-info"></div>
-            <input type="text" id="numberInput" placeholder="Enter numbers" autofocus>
-            <button onclick="submitNumbers()">Submit</button>
-
-            <div class="result" id="result"></div>
-            <div id="errorDisplay" class="error"></div>
-            <div id="gameEndMessage" class="game-end-message hidden"></div>
-        </div>
+    <div class="hearts-container">
+      <h2>Click on the hidden hearts for sweet messages!</h2>
+      <div class="heart" id="heart1" onclick="showMessage()"></div>
+      <div class="heart" id="heart2" onclick="showMessage()"></div>
+      <div class="heart" id="heart3" onclick="showMessage()"></div>
+      
+      <div class="message" id="message-container"></div>
+      <div class="flowers-container" id="flowers-container"></div>
     </div>
 
-    <script>
-        let playerCount = 0;
-        let players = [];
-        let currentTurn = 0;
-        let currentNumber = 0;
-        const maxNumber = 21;
+    <div class="gift-container">
+      <h2>Open your Valentine's Gift!</h2>
+      <div class="gift" id="gift"></div>
+    </div>
 
-        // Function to hide instructions and show the game
-        function startGame() {
-            document.querySelector('.container').classList.add('hidden');
-            document.getElementById('gameSection').classList.remove('hidden');
-        }
+    <div class="surprise-message" id="surprise-message">
+      <h2>Happy Valentine's Day!</h2>
+      <p>You are the sweetest person in the world!</p>
+      <img src="https://media.tenor.com/hmYv6-dCkGgAAAAj/bubu-dudu-bubu.gif" alt="Heart Animation" />
+    </div>
+  </div>
 
-        function startSinglePlayer() {
-            playerCount = 1;
-            document.getElementById('player-selection').classList.add('hidden');
-            document.getElementById('player-names').classList.remove('hidden');
-            document.getElementById('nameFields').innerHTML = `<input type="text" id="player0" placeholder="Enter your name"><br>`;
-        }
+  <script>
+    // Countdown Timer
+    const countdown = () => {
+      const valentineDate = new Date('Feb 14, 2025 00:00:00').getTime();
+      const now = new Date().getTime();
+      const distance = valentineDate - now;
 
-        function startMultiPlayer() {
-            playerCount = 2;
-            document.getElementById('player-selection').classList.add('hidden');
-            document.getElementById('player-names').classList.remove('hidden');
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            let nameFields = document.getElementById('nameFields');
-            nameFields.innerHTML = `<input type="text" id="player0" placeholder="Enter Player 1's name"><br>
-                                    <input type="text" id="player1" placeholder="Enter Player 2's name"><br>`;
-        }
+      document.getElementById("days").innerHTML = days;
+      document.getElementById("hours").innerHTML = hours;
+      document.getElementById("minutes").innerHTML = minutes;
+      document.getElementById("seconds").innerHTML = seconds;
 
-        function startGameWithNames() {
-            players = [];
-            for (let i = 0; i < playerCount; i++) {
-                let playerName = document.getElementById(`player${i}`).value;
-                if (playerName === "") {
-                    alert("Please enter all player names.");
-                    return;
-                }
-                players.push(playerName);
-            }
+      if (distance < 0) {
+        clearInterval(timer);
+        document.querySelector(".countdown-container").style.display = 'none';
+        document.getElementById('surprise-message').style.display = 'block';
+      }
+    };
 
-            document.getElementById('player-names').classList.add('hidden');
-            document.getElementById('game').classList.remove('hidden');
+    const timer = setInterval(countdown, 1000);
 
-            displayTurn();
-        }
+    // Get the name from the URL and display it
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+    if (name) {
+      document.getElementById('for-name').innerText = `For ${name}`;
+    }
 
-        function displayTurn() {
-            let player = players[currentTurn];
-            document.getElementById('turnDisplay').innerText = `${player}'s turn`;
-            document.getElementById('numberInput').placeholder = `Enter numbers (${player}'s turn)`;
-            document.getElementById('errorDisplay').innerText = ""; // Clear error message
-        }
+    // Hidden Hearts and Messages
+    const messages = [
+      "You're my sunshine!",
+      "You're my better half!",
+      "You're the reason I smile!",
+      "You light up my world!",
+      "My heart beats for you!",
+      "I adore you more than words can say!",
+      "You're my forever Valentine!",
+      "You're sweeter than chocolate!",
+      "You make my heart skip a beat!",
+      "I'm lucky to have you in my life!",
+      "You mean the world to me!",
+      "Every day with you is a treasure!",
+      "Your love completes me!",
+      "You're my favorite person!"
+    ];
 
-        function submitNumbers() {
-            let input = document.getElementById('numberInput').value.trim();
-            let enteredNumbers = input.split(" ").map(Number);
-            document.getElementById('result').innerHTML = ""; // Clear previous result
+    function showMessage() {
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      const messageContainer = document.getElementById('message-container');
+      messageContainer.innerHTML = messages[randomIndex];
+      messageContainer.classList.add('show');
 
-            // Check if input is valid
-            if (enteredNumbers.length < 1 || enteredNumbers.length > 3 || enteredNumbers.some(isNaN)) {
-                displayErrorMessage("Please enter 1 to 3 valid numbers, space-separated.");
-                return;
-            }
+      showFallingFlowers();
 
-            let player = players[currentTurn];
+      setTimeout(() => {
+        messageContainer.classList.remove('show');
+      }, 3000);
+    }
 
-            // Validate if the player followed the sequence
-            for (let number of enteredNumbers) {
-                if (number !== currentNumber + 1) {
-                    displayErrorMessage("You must continue the sequence from the last number!");
-                    return;
-                }
-                currentNumber++;
+    function showFallingFlowers() {
+      const flowersContainer = document.getElementById('flowers-container');
+      flowersContainer.innerHTML = '';
 
-                if (currentNumber === maxNumber) {
-                    endGame(`${player} lost!`);
-                    return;
-                }
+      for (let i = 0; i < 100; i++) {
+        const flower = document.createElement('div');
+        flower.classList.add('flower');
+        flower.style.left = Math.random() * 100 + 'vw';
+        flower.style.animationDuration = Math.random() * 5 + 5 + 's';
+        flower.style.opacity = Math.random() + 0.5;
+        flower.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+        flowersContainer.appendChild(flower);
+      }
 
-                if (currentNumber === maxNumber - 1) {
-                    document.getElementById('result').innerHTML += `${player} entered: ${enteredNumbers.join(", ")}<br>`;
-                    document.getElementById('numberInput').value = ""; // Clear input box
-                    setTimeout(() => endGame(`${player} won!`), 1000);
-                    return;
-                }
-            }
+      setTimeout(() => {
+        flowersContainer.innerHTML = '';
+      }, 5000);
+    }
 
-            document.getElementById('result').innerHTML += `${player} entered: ${enteredNumbers.join(", ")}<br>`;
-            document.getElementById('numberInput').value = ""; // Clear input box
-
-            currentTurn = (currentTurn + 1) % players.length;
-
-            if (playerCount === 1 && currentTurn === 0) {
-                setTimeout(robotTurn, 1000); // Robot's turn after 1 second
-            } else {
-                displayTurn();
-            }
-        }
-
-        function robotTurn() {
-            let enteredNumbers = [];
-            let robotNumbers = Math.floor(Math.random() * 3) + 1;
-            for (let i = 0; i < robotNumbers; i++) {
-                enteredNumbers.push(currentNumber + 1);
-                currentNumber++;
-
-                if (currentNumber === maxNumber) {
-                    endGame(`${players[0]} lost!`);
-                    return;
-                } else if (currentNumber === maxNumber - 1) {
-                    endGame(`${players[0]} won!`);
-                    return;
-                }
-            }
-
-            document.getElementById('result').innerHTML += `Robot entered: ${enteredNumbers.join(", ")}`;
-            document.getElementById('numberInput').value = "";
-            currentTurn = (currentTurn + 1) % players.length;
-            displayTurn();
-        }
-
-        function endGame(message) {
-            document.getElementById('gameEndMessage').innerText = message;
-            document.getElementById('gameEndMessage').classList.remove('hidden');
-        }
-
-        function displayErrorMessage(message) {
-            document.getElementById('errorDisplay').innerText = message;
-        }
-    </script>
+    // Gift Opening
+    const gift = document.getElementById('gift');
+    gift.addEventListener('click', function() {
+      document.getElementById('surprise-message').style.display = 'block';
+    });
+  </script>
 </body>
 </html>
